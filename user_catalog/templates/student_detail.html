@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Attendance</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .btn-excused {
+            background-color: yellow;
+            border-color: yellow;
+            color: black;
+        }
+
+        .present {
+            background-color: green;
+            color: white;
+        }
+
+        .absent {
+            background-color: red;
+            color: white;
+        }
+
+        .excused {
+            background-color: yellow;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">{{ student.name }}'s Attendance</h1>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                <label for="date">Date</label>
+                {{ form.date(class="form-control") }}
+            </div>
+            <!-- Buton pentru "Prezent" -->
+            <button type="submit" name="present" class="btn btn-success">Mark Present</button>
+            <!-- Buton pentru "Absent" -->
+            <button type="submit" name="absent" class="btn btn-danger">Mark Absent</button>
+            <!-- Buton pentru "Invoit" -->
+            <button type="submit" name="excused" class="btn btn-excused">Mark Excused</button>
+        </form>
+
+        <h3 class="mt-4">Attendance Records</h3>
+        <ul class="list-group">
+            {% for attendance in attendances %}
+            <li class="list-group-item
+                {% if attendance.present and not attendance.excused %}present
+                {% elif not attendance.present and not attendance.excused %}absent
+                {% elif attendance.excused %}excused{% endif %}
+            ">
+                {{ attendance.date }} - 
+                {% if attendance.excused %}Excused (Present){% elif attendance.present %}Present{% else %}Absent{% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
